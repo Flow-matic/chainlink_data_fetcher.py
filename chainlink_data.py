@@ -28,6 +28,9 @@ def fetch_chainlink_data(api_url):
             if not isinstance(value, str):
                 params[key] = str(value)
 
+        # Print the API URL before making the request
+        print(f"API URL: {api_url}")
+
         response = requests.get(urlencode(api_url, params))
         response.raise_for_status()
         data = response.json()
