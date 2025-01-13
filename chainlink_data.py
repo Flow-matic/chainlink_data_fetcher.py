@@ -20,6 +20,14 @@ def fetch_chainlink_data(api_url):
         A dictionary containing the extracted data, or None if no data is found.
     """
     try:
+        # Print the params dictionary for debugging
+        print(params)
+
+        # Ensure all values in params are strings
+        for key, value in params.items():
+            if not isinstance(value, str):
+                params[key] = str(value)
+
         response = requests.get(urlencode(api_url, params))
         response.raise_for_status()
         data = response.json()
@@ -27,7 +35,7 @@ def fetch_chainlink_data(api_url):
         if data["data"]:
             latest_data_point = data["data"][0]
             # Extract the desired data point (e.g., 'result')
-            extracted_data = latest_data_point.get("result", None) 
+            extracted_data = latest_data_point.get("result", None)
             return extracted_data
         else:
             print(f"No data found in the Chainlink API response for {api_url}")
