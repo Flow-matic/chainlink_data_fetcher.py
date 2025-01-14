@@ -1,11 +1,20 @@
 import requests
 
-# Replace with your actual Chainlink API endpoints and parameters
-bnbusd_api_url = "https://api.chainlink.io/v2/jobs/your_bnbusd_job_id/runs"  # Replace with actual job ID
-cakeusd_api_url = "https://api.chainlink.io/v2/jobs/your_cakeusd_job_id/runs"  # Replace with actual job ID
+# Replace with your actual API URLs and authentication details
+bnbusd_api_url = "https://api.chainlink.io/v2/jobs/actual_bnbusd_job_id/runs"  # Replace with the actual job ID
+cakeusd_api_url = "https://api.chainlink.io/v2/jobs/actual_cakeusd_job_id/runs"  # Replace with the actual job ID
+api_key = "your_api_key_here"  # Replace with your API key or token
+
+# Request headers for authentication
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+# Request parameters
 params = {
     "status": "completed",
-    "size": 1,
+    "size": "1",  # Ensure parameters are strings
 }
 
 def fetch_chainlink_data(api_url, params):
@@ -20,19 +29,11 @@ def fetch_chainlink_data(api_url, params):
         A dictionary containing the extracted data, or None if no data is found.
     """
     try:
-        # Print the params dictionary for debugging
-        print(params)
+        # Send the GET request with parameters and headers
+        response = requests.get(api_url, params=params, headers=headers)
+        response.raise_for_status()  # Raise an error for HTTP errors (4xx/5xx)
 
-        # Ensure all values in params are strings
-        for key, value in params.items():
-            if not isinstance(value, str):
-                params[key] = str(value)
-
-        # Send the GET request with parameters
-        response = requests.get(api_url, params=params)
-        response.raise_for_status()  # Will raise an error for 4xx/5xx status codes
-
-        # Get the response as JSON
+        # Parse the response JSON
         data = response.json()
 
         # Check if the response contains data
@@ -54,8 +55,12 @@ if __name__ == "__main__":
     cakeusd_price = fetch_chainlink_data(cakeusd_api_url, params)
 
     # Print the prices if they were successfully retrieved
-    if bnbusd_price and cakeusd_price:
+    if bnbusd_price is not None:
         print(f"BNBUSD Price: {bnbusd_price}")
+    else:
+        print("Failed to retrieve BNBUSD price.")
+
+    if cakeusd_price is not None:
         print(f"CAKEUSD Price: {cakeusd_price}")
     else:
-        print("Failed to retrieve one or both prices from Chainlink.")
+        print("Failed to retrieve CAKEUSD price.")
