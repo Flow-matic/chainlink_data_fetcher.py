@@ -1,8 +1,7 @@
 import requests
 
 # Replace with your actual API URLs and authentication details
-bnbusd_api_url = "https://api.chainlink.io/v2/jobs/actual_bnbusd_job_id/runs"  # Replace with the actual job ID
-cakeusd_api_url = "https://api.chainlink.io/v2/jobs/actual_cakeusd_job_id/runs"  # Replace with the actual job ID
+bnbusd_api_url = "https://api.chainlink.io/v2/jobs/actual_bnbusd_job_id/runs"  # Replace with the actual job ID for BNB
 api_key = "your_api_key_here"  # Replace with your API key or token
 
 # Request headers for authentication
@@ -50,17 +49,11 @@ def fetch_chainlink_data(api_url, params):
         return None
 
 if __name__ == "__main__":
-    # Fetch data for BNBUSD and CAKEUSD
+    # Fetch data for BNBUSD only
     bnbusd_price = fetch_chainlink_data(bnbusd_api_url, params)
-    cakeusd_price = fetch_chainlink_data(cakeusd_api_url, params)
 
-    # Print the prices if they were successfully retrieved
+    # Print the price if it was successfully retrieved
     if bnbusd_price is not None:
         print(f"BNBUSD Price: {bnbusd_price}")
     else:
         print("Failed to retrieve BNBUSD price.")
-
-    if cakeusd_price is not None:
-        print(f"CAKEUSD Price: {cakeusd_price}")
-    else:
-        print("Failed to retrieve CAKEUSD price.")
